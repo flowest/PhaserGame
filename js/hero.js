@@ -1,15 +1,18 @@
 function Hero(game, x, y) {
     // call Phaser.Sprite constructor
-    Phaser.Sprite.call(this, game, x, y, 'hero');
+    Phaser.Sprite.call(this, game, x, y, 'fox');
     this.anchor.set(0.5, 0.5);
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true;
     // this.body.bounce.y = 0.5;
 
-    this.animations.add('stop', [0]);
-    this.animations.add('run', [1, 2], 8, true); // 8fps looped
-    this.animations.add('jump', [3]);
-    this.animations.add('fall', [4]);
+    this.scale.x = 1.5;
+    this.scale.y = 1.5;
+
+    this.animations.add('stop', [5]);
+    this.animations.add('run', [ 1, 2, 3, 4], 20, true); // 8fps looped
+    this.animations.add('jump', [1]);
+    this.animations.add('fall', [1]);
 }
 
 // inherit from Phaser.Sprite
@@ -21,10 +24,10 @@ Hero.prototype.move = function (direction) {
     this.body.velocity.x = direction * SPEED;
 
     if (this.body.velocity.x < 0) {
-        this.scale.x = -1;
+        this.scale.x = -1.5;
     }
     else if (this.body.velocity.x > 0) {
-        this.scale.x = 1;
+        this.scale.x = 1.5;
     }
 };
 
