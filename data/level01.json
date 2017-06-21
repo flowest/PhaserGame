@@ -4,13 +4,13 @@
         {"image": "grass:4x1", "x": 420, "y": 420}
     ],
     "decoration": [
-        {"frame": 2, "x": 630, "y": 504},
-        {"frame": 2, "x": 663, "y": 504},
-        {"frame": 2, "x": 697, "y": 504},
-        {"frame": 3, "x": 756, "y": 504},
-        {"frame": 1, "x": 84, "y": 504},
-        {"frame": 0, "x": 252, "y": 504},
-        {"frame": 4, "x": 462, "y": 378}
+        {"frame": 2, "x": 630, "y": 525},
+        {"frame": 2, "x": 663, "y": 525},
+        {"frame": 2, "x": 697, "y": 525},
+        {"frame": 3, "x": 756, "y": 525},
+        {"frame": 1, "x": 84, "y": 525},
+        {"frame": 0, "x": 252, "y": 525},
+        {"frame": 4, "x": 462, "y": 399}
     ],
     "coins": [
         {"x": 147, "y": 525}, {"x": 189, "y": 525},
@@ -19,7 +19,10 @@
     ],
     "hero": {"x": 21, "y": 525},
     "spiders": [{"x": 450, "y": 340}],
-    "door": {"x": 231, "y": 546},
+    "frogs":[],
+    "eagles":[],
+    "opossums":[],
+    "door": {"x": 231, "y": 546, "doorType" : "door"},
     "key": {"x": 525, "y": 336},
     "background" : "background-night",
     "backgroundColor":"#0023da",

@@ -8,21 +8,16 @@
         {"image": "grass:4x1", "x": 20, "y": -420},
         {"image": "grass:4x1", "x": 120, "y": -715}
     ],
-    "decoration": [
-        {"frame": 2, "x": 630, "y": 504},
-        {"frame": 2, "x": 663, "y": 504},
-        {"frame": 2, "x": 697, "y": 504},
-        {"frame": 3, "x": 756, "y": 504},
-        {"frame": 1, "x": 84, "y": 504},
-        {"frame": 0, "x": 252, "y": 504},
-        {"frame": 4, "x": 462, "y": 378}
-    ],
+    "decoration": [],
     "coins": [
         {"x": 819, "y": 525}, {"x": 861, "y": 525}, {"x": 903, "y": 525}
     ],
     "hero": {"x": 21, "y": 525},
     "spiders": [],
-    "door": {"x": 220, "y": -715},
+    "frogs":[{"x": 450, "y": 340}],
+    "eagles":[{"x": 650, "y": 340}],
+    "opossums":[{"x": 250, "y": 240}],
+    "door": {"x": 220, "y": -715, "doorType" : "door"},
     "key": {"x": 825, "y": -500},
     "background" : "background",
     "backgroundColor":"#dbebff",

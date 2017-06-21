@@ -31,14 +31,18 @@ PlayState.preload = function () {
 
     this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
+    this.game.load.spritesheet('frog', 'images/frog.png', 34, 28);
+    this.game.load.spritesheet('eagle', 'images/eagle.png', 40, 40);
+    this.game.load.spritesheet('opossum', 'images/oposum.png', 36, 28);
     this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
     this.game.load.spritesheet('door', 'images/door.png', 42, 66);
     this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
     this.game.load.spritesheet('fox', 'images/fox.png', 32, 32);
+    this.game.load.spritesheet('decor', 'images/decor.png', 42, 42);
+
 
     // this.game.load.image('background', 'images/background.png');
     this.game.load.image('background-night', 'images/background_night.png');
-    this.game.load.image('ground', 'images/ground.png');
     this.game.load.image('grass:8x1', 'images/grass_8x1.png');
     this.game.load.image('grass:6x1', 'images/grass_6x1.png');
     this.game.load.image('grass:4x1', 'images/grass_4x1.png');
@@ -48,12 +52,12 @@ PlayState.preload = function () {
     this.game.load.image('icon:coin', 'images/coin_icon.png');
     this.game.load.image('font:numbers', 'images/numbers.png');
     this.game.load.image('key', 'images/key.png');
+    this.game.load.image('door2', 'images/door2.png');
 
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
     this.game.load.audio('sfx:key', 'audio/key.wav');
-    this.game.load.audio('sfx:door', 'audio/door.wav');
     this.game.load.audio('soundtrack', 'audio/bass.mp3');
 };
 
@@ -73,12 +77,12 @@ PlayState.create = function () {
         soundtrack: this.game.add.audio('soundtrack')
     };
 
-    if(playingSoundtrack == false){
+    if (playingSoundtrack == false) {
         this.game.sound.setDecodedCallback(this.sfx.soundtrack, this._startSound, this);
     }
 };
 
-PlayState._startSound = function(){
+PlayState._startSound = function () {
     this.sfx.soundtrack.loopFull();
     playingSoundtrack = true;
 }
@@ -89,7 +93,7 @@ PlayState.update = function () {
     this.coinFont.text = `x${this.coinPickupCount}`;
     this.keyIcon.frame = this.hasKey ? 1 : 0;
 
-    this.game.camera.focusOnXY(this.hero.x, this.hero.y-200);
+    this.game.camera.focusOnXY(this.hero.x, this.hero.y - 200);
 };
 
 PlayState._createHud = function () {
@@ -117,30 +121,39 @@ PlayState._createHud = function () {
 PlayState._loadLevel = function (data) {
     this.game.add.image(0, 0, data.background);
 
+
     this.game.world.setBounds(0, -2000, 960, 3000);
     this.game.stage.backgroundColor = data.backgroundColor;
     // this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'background');
 
-
     this.bgDecoration = this.game.add.group();
     this.platforms = this.game.add.group();
     this.coins = this.game.add.group();
-    this.spiders = this.game.add.group();
+    this.enemies = this.game.add.group();
     this.enemyWalls = this.game.add.group();
     // this.enemyWalls.visible = false;
     this.enemyWalls.alpha = 0;
 
     data.platforms.forEach(this._spawnPlatform, this);
-    this._spawnCharacters({ hero: data.hero, spiders: data.spiders });
+    data.decoration.forEach(this._spawnDecoration, this);
+    this._spawnCharacters({ hero: data.hero, spiders: data.spiders, frogs: data.frogs, eagles: data.eagles, opossums: data.opossums });
     data.coins.forEach(this._spawnCoin, this);
-    this._spawnDoor(data.door.x, data.door.y);
+    this._spawnDoor(data.door.x, data.door.y, data.door.doorType);
     this._spawnKey(data.key.x, data.key.y);
 
     this.game.physics.arcade.gravity.y = data.gravity;
 };
 
-PlayState._spawnDoor = function (x, y) {
-    this.door = this.bgDecoration.create(x, y, 'door');
+PlayState._spawnDecoration = function (decoration) {
+    let deco = this.bgDecoration.create(decoration.x, decoration.y, 'decor');
+    deco.anchor.set(0.5);
+
+    deco.animations.add('type', [decoration.frame]);
+    deco.animations.play('type');
+}
+
+PlayState._spawnDoor = function (x, y, doorType) {
+    this.door = this.bgDecoration.create(x, y, doorType);
     this.door.anchor.setTo(0.5, 1);
     this.game.physics.enable(this.door);
     this.door.body.allowGravity = false;
@@ -190,7 +203,22 @@ PlayState._spawnCharacters = function (data) {
 
     data.spiders.forEach(function (spider) {
         let sprite = new Spider(this.game, spider.x, spider.y);
-        this.spiders.add(sprite);
+        this.enemies.add(sprite);
+    }, this);
+
+    data.frogs.forEach(function (frog) {
+        let sprite = new Frog(this.game, frog.x, frog.y);
+        this.enemies.add(sprite);
+    }, this);
+
+    data.eagles.forEach(function (egale) {
+        let sprite = new Eagle(this.game, egale.x, egale.y);
+        this.enemies.add(sprite);
+    }, this);
+
+    data.opossums.forEach(function (opossum) {
+        let sprite = new Opossum(this.game, opossum.x, opossum.y);
+        this.enemies.add(sprite);
     }, this);
 };
 
@@ -211,11 +239,11 @@ PlayState._handleCollisions = function () {
     this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin,
         null, this);
 
-    this.game.physics.arcade.collide(this.spiders, this.platforms);
+    this.game.physics.arcade.collide(this.enemies, this.platforms);
 
-    this.game.physics.arcade.collide(this.spiders, this.enemyWalls);
+    this.game.physics.arcade.collide(this.enemies, this.enemyWalls);
 
-    this.game.physics.arcade.overlap(this.hero, this.spiders,
+    this.game.physics.arcade.overlap(this.hero, this.enemies,
         this._onHeroVsEnemy, null, this);
 
     this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey,
