@@ -14,12 +14,36 @@ function Frog(game, x, y) {
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true;
     // this.body.velocity.x = Spider.SPEED;
+    
+
+    this.body.bounce.y = 1;
+    this.body.velocity.x = Frog.SPEED;
+
+    this.body.onWorldBounds = new Phaser.Signal();
+    this.body.onWorldBounds.add(hitWorldBounds, this);
 }
 
 // inherit from Phaser.Sprite
 Frog.prototype = Object.create(Phaser.Sprite.prototype);
 Frog.prototype.constructor = Frog;
 
+Frog.SPEED = 400;
+
 // Spider.prototype.update = function () {
 
 // };
+
+function hitWorldBounds(frog){
+    
+    if (this.body.touching.right || this.body.blocked.right) {
+        this.body.velocity.x = -Frog.SPEED; // turn left
+    }
+    else if (this.body.touching.left || this.body.blocked.left) {
+        this.body.velocity.x = Frog.SPEED; // turn right
+    }
+}
+
+Frog.prototype.die = function () {
+    this.body.enable = false;
+    this.kill();
+};

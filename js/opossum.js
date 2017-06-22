@@ -17,7 +17,7 @@ function Opossum(game, x, y) {
     this.body.velocity.x = Opossum.SPEED;
 }
 
-Opossum.SPEED = 100;
+Opossum.SPEED = 200;
 
 // inherit from Phaser.Sprite
 Opossum.prototype = Object.create(Phaser.Sprite.prototype);
@@ -41,4 +41,9 @@ Opossum.prototype.die = function () {
     this.animations.play('die').onComplete.addOnce(function () {
         this.kill();
     }, this);
+};
+
+Opossum.prototype.die = function () {
+    this.body.enable = false;
+    this.kill();
 };

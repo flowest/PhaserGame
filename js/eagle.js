@@ -13,7 +13,13 @@ function Eagle(game, x, y) {
     // physic properties
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true;
-    // this.body.velocity.x = Spider.SPEED;
+    this.body.allowGravity = 0;
+
+    this.game.add.tween(this)
+        .to({ y: y + 100 }, 800, Phaser.Easing.Sinusoidal.InOut)
+        .yoyo(true)
+        .loop()
+        .start();;
 }
 
 // inherit from Phaser.Sprite
@@ -23,3 +29,8 @@ Eagle.prototype.constructor = Eagle;
 // Spider.prototype.update = function () {
 
 // };
+Eagle.prototype.die = function () {
+    this.body.enable = false;
+    this.kill();
+};
+

@@ -28,6 +28,7 @@ PlayState.preload = function () {
     this.game.load.json('level:2', 'data/level02.json');
     this.game.load.json('level:3', 'data/level03.json');
     this.game.load.json('level:4', 'data/level04.json');
+    this.game.load.json('level:5', 'data/level05.json');
 
     this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
